@@ -1,10 +1,8 @@
 import { desc, eq } from "drizzle-orm";
 import { db } from "../database/index.js";
 import { users } from "../database/schema.js";
-import { UpdateUsersRequest } from "../lib/dto/users.js";
-
 export class UserModel {
-    static async create(username: string, email: string, password: string, avatar?: string) {
+    static async create(username, email, password, avatar) {
         const result = await db.insert(users).values({
             username,
             email,
@@ -13,8 +11,7 @@ export class UserModel {
         }).returning();
         return result[0];
     }
-
-    static async update({ id, username, avatar, avatarId }: UpdateUsersRequest) {
+    static async update({ id, username, avatar, avatarId }) {
         const result = await db.update(users).set({
             username,
             avatar,
@@ -23,23 +20,19 @@ export class UserModel {
         }).where(eq(users.id, id)).returning();
         return result[0] || null;
     }
-
     static async findAll() {
-        const result = await db.select().from(users).orderBy(desc(users.createdAt))
+        const result = await db.select().from(users).orderBy(desc(users.createdAt));
         return result;
     }
-
-    static async findByEmail(email: string) {
+    static async findByEmail(email) {
         const result = await db.select().from(users).where(eq(users.email, email));
         return result[0] || null;
     }
-
-    static async findById(id: number) {
+    static async findById(id) {
         const result = await db.select().from(users).where(eq(users.id, id));
         return result[0] || null;
     }
-
-    static async delete(id: number) {
+    static async delete(id) {
         const result = await db.delete(users).where(eq(users.id, id)).returning();
         return result[0] || null;
     }

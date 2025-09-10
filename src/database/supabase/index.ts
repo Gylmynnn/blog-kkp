@@ -1,7 +1,7 @@
 import sharp from 'sharp'
 import { v4 as uuidv4 } from 'uuid'
-import { supabase } from '../index';
-import { UploadResponse } from './type';
+import { supabase } from '../index.js';
+import { UploadResponse } from './type.js';
 
 
 export async function SupabaseDelete(assetId: string): Promise<void> {

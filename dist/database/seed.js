@@ -1,12 +1,10 @@
-import { db } from "./index.js"; 
+import { db } from "./index.js";
 import { users } from "./schema.js";
 import bcrypt from "bcryptjs";
-
 async function seed() {
     console.log("Seeding users...");
     // hash password
     const hashedPassword = await bcrypt.hash("password123", 10);
-
     await db.insert(users).values([
         {
             username: "admin",
@@ -27,9 +25,8 @@ async function seed() {
     ]);
     console.log("✅ Seeding selesai");
 }
-
 seed().then(() => process.exit(0))
     .catch((err) => {
-        console.error(err);
-        process.exit(1);
-    });
+    console.error(err);
+    process.exit(1);
+});

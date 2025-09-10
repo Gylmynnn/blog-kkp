@@ -1,11 +1,11 @@
 import { Context } from "hono";
-import { PostsModel } from "../model/posts.model";
-import { ResFormmater } from "../lib/utils/response";
-import { AssetActions } from "../database/supabase/upload";
-import { CreatePostsRequest, UpdatePostsRequest } from "../lib/dto/posts";
-import { UserPayloadData } from "../lib/dto/auth";
-import { SupabaseDelete } from "../database/supabase/index";
-import { UploadResponse } from "../database/supabase/type";
+import { PostsModel } from "../model/posts.model.js";
+import { ResFormmater } from "../lib/utils/response.js";
+import { AssetActions } from "../database/supabase/upload.js";
+import { CreatePostsRequest, UpdatePostsRequest } from "../lib/dto/posts.js";
+import { UserPayloadData } from "../lib/dto/auth.js";
+import { SupabaseDelete } from "../database/supabase/index.js";
+import { UploadResponse } from "../database/supabase/type.js";
 
 
 export class PostsController {

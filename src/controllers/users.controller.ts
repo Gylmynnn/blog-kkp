@@ -1,11 +1,11 @@
 import { Context } from "hono";
-import { ResFormmater } from "../lib/utils/response";
-import { UserModel } from "../model/users.model";
-import { UploadResponse } from "../database/supabase/type";
-import { SupabaseDelete } from "../database/supabase/index";
-import { AssetActions } from "../database/supabase/upload";
-import { UpdateUsersRequest } from "../lib/dto/users";
-import { UserPayloadData } from "../lib/dto/auth";
+import { ResFormmater } from "../lib/utils/response.js";
+import { UserModel } from "../model/users.model.js";
+import { UploadResponse } from "../database/supabase/type.js";
+import { SupabaseDelete } from "../database/supabase/index.js";
+import { AssetActions } from "../database/supabase/upload.js";
+import { UpdateUsersRequest } from "../lib/dto/users.js";
+import { UserPayloadData } from "../lib/dto/auth.js";
 
 export class UserController {
     static async update(c: Context) {

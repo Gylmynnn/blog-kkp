@@ -2,10 +2,10 @@ import { Context } from "hono";
 import bcrypt from "bcryptjs";
 import { sign } from "hono/jwt";
 import { JWTPayload } from "hono/utils/jwt/types";
-import { AuthModel } from "../model/auth.model";
-import { ResFormmater } from "../lib/utils/response";
-import { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from "../lib/dto/auth";
-import { UserModel } from "../model/users.model";
+import { AuthModel } from "../model/auth.model.js";
+import { ResFormmater } from "../lib/utils/response.js";
+import { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from "../lib/dto/auth.js";
+import { UserModel } from "../model/users.model.js";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 export class AuthController {

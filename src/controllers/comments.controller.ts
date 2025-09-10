@@ -1,8 +1,8 @@
 import { Context } from "hono";
-import { UserPayloadData } from "../lib/dto/auth";
-import { ResFormmater } from "../lib/utils/response";
-import { CreateCommentsRequest, UpdateCommentsRequest } from "../lib/dto/comments";
-import { CommentModel } from "../model/comments.model";
+import { UserPayloadData } from "../lib/dto/auth.js";
+import { ResFormmater } from "../lib/utils/response.js";
+import { CreateCommentsRequest, UpdateCommentsRequest } from "../lib/dto/comments.js";
+import { CommentModel } from "../model/comments.model.js";
 
 export class CommentsController {
     static async create(c: Context) {

@@ -1,30 +1,28 @@
 import { Context, Hono } from 'hono'
 import { cors } from 'hono/cors'
-import auth from './routes/auth.route'
-import posts from './routes/posts.route';
-import comments from './routes/comments.route';
-import users from './routes/users.route';
-import swagger from './routes/swagger.route';
-import { UserController } from './controllers/users.controller';
+import auth from './routes/auth.route.js'
+import posts from './routes/posts.route.js';
+import comments from './routes/comments.route.js';
+import users from './routes/users.route.js';
+import swagger from './routes/swagger.route.js';
 
 const app = new Hono()
-    .use(
-        "*", cors({
-            origin: "*",
-            credentials: true,
-            allowMethods: ["GET", "POST", "PUT", "DELETE", "options"],
-            allowHeaders: ["Content-Type", "Authorization"],
-        })
-    )
+app.use(
+    "*", cors({
+        origin: "*",
+        credentials: true,
+        allowMethods: ["GET", "POST", "PUT", "DELETE", "options"],
+        allowHeaders: ["Content-Type", "Authorization"],
+    })
+)
 
-    .get("/users", UserController.getAll)
 
-    .route("/swagger", swagger)
-    .get("/", (c: Context) => c.text("Blog KKP Backend, Dibuat dengan Hono + Typscript + DrizleORM"))
-    .route("/api", auth)
-    .route("/api", posts)
-    .route("/api", comments)
-    .route("/api", users)
+app.route("/swagger", swagger)
+app.get("/", (c: Context) => c.text("Blog KKP Backend, Dibuat dengan Hono + Typscript + DrizleORM"))
+app.route("/api", auth)
+app.route("/api", posts)
+app.route("/api", comments)
+app.route("/api", users)
 
 export default app;
 
