@@ -26,8 +26,5 @@ const app = new Hono()
     .route("/api", comments)
     .route("/api", users)
 
-export default {
-    port: 3000,
-    hostname: "0.0.0.0",
-    fetch: app.fetch,
-};
+export default app;
+
