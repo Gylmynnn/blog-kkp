@@ -62,7 +62,7 @@ export class AuthController {
                 avatar: user.avatar ?? "",
                 email: user.email,
                 token: token,
-                idAdmin: user.isAdmin ?? false,
+                isAdmin: user.isAdmin ?? false,
                 createdAt: user.createdAt!,
             }
             return c.json(ResFormmater.success(response, "Login berhasil"), 200);
