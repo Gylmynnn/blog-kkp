@@ -13,13 +13,10 @@ export class AuthController {
         try {
             const { username, email, password } = await c.req.json<RegisterRequest>();
             if (!username || !email || !password) return c.json(ResFormmater.failed("Username, Email dan password wajib diisi", 400), 400);
-
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/ as RegExp;
             if (!emailRegex.test(email)) return c.json(ResFormmater.failed("Format email tidak valid", 400), 400);
-
             const existingUser = await UserModel.findByEmail(email);
             if (existingUser) return c.json(ResFormmater.failed("Email sudah digunakan", 400), 400);
-
             if (password.length < 6) return c.json(ResFormmater.failed("Password minimal 6 karakter"), 400);
             const hashPw = await bcrypt.hash(password, 10)
             const defaultAvatar = "https://avatar.iran.liara.run/public";
@@ -47,7 +44,6 @@ export class AuthController {
             if (!user) return c.json(ResFormmater.failed("Tidak dapat menemukan akun dengan email tersebut. Silakan periksa kembali", 401), 401);
             const valid = await bcrypt.compare(password, user.password);
             if (!valid) return c.json(ResFormmater.failed("Kata sandi yang Anda masukkan tidak sesuai. Silakan coba lagi.", 401), 401);
-
             const payload: JWTPayload = {
                 userId: user.id,
                 username: user.username,
@@ -60,19 +56,18 @@ export class AuthController {
                 JWT_SECRET!,
                 "HS256"
             );
-
             const response: LoginResponse = {
                 id: user.id,
                 username: user.username,
                 avatar: user.avatar ?? "",
                 email: user.email,
                 token: token,
+                idAdmin: user.isAdmin ?? false,
                 createdAt: user.createdAt!,
             }
             return c.json(ResFormmater.success(response, "Login berhasil"), 200);
         } catch (err) {
             return c.json(ResFormmater.failed("Server Error" + err, 500), 500);
         }
-
     }
 }

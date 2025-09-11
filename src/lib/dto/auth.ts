@@ -11,6 +11,7 @@ interface LoginResponse {
     email: string;
     token: string;
     avatar: string;
+    idAdmin: boolean;
     createdAt: Date;
 }
 
