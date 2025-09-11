@@ -70,8 +70,7 @@ export class UserController {
             const userRole = c.get("user") as UserPayloadData
             if (!userRole.isAdmin) return c.json(ResFormmater.failed("Hanya admin yang bisa hapus", 400), 400)
             const id = Number(c.req.param("id"));
-            if (!id) return c.json(ResFormmater.failed("id tidak ditemukan"))
-
+            if (!id) return c.json(ResFormmater.failed("Id tidak ditemukan atau tidak valid"));
             const response = await UserModel.delete(id)
             if (!response) return c.json(ResFormmater.failed("user tidak ditemukan", 404), 404)
 

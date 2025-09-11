@@ -8,18 +8,18 @@ export class CommentsController {
     static async create(c: Context) {
         try {
             const userAuth = c.get("user") as UserPayloadData
-            if (!userAuth) return c.json(ResFormmater.failed("Uanuthorization"), 404)
+            if (!userAuth) return c.json(ResFormmater.failed("Unauthorization"), 404)
             const formData = await c.req.formData();
             const content = formData.get("content") as string;
             const postId = formData.get("post_id") as string;
-            if (!content || !postId) return c.json(ResFormmater.failed("content dan post id harus diisi"), 400);
+            if (!content || !postId) return c.json(ResFormmater.failed("Field content dan post id harus diisi"), 400);
             const data: CreateCommentsRequest = {
                 content,
                 postId: Number(postId),
                 authorId: userAuth.userId,
             };
             const response = await CommentModel.create(data)
-            return c.json(ResFormmater.success(response, "Create posts successfully", 201), 201);
+            return c.json(ResFormmater.success(response, "Berhasil membuat komentar", 201), 201);
         } catch (err) {
             return c.json(ResFormmater.failed("Server Error" + err, 500), 500);
         }
@@ -28,9 +28,10 @@ export class CommentsController {
     static async update(c: Context) {
         try {
             const userAuth = c.get("user") as UserPayloadData
-            if (!userAuth) return c.json(ResFormmater.failed("Unuthorization"), 404)
+            if (!userAuth) return c.json(ResFormmater.failed("Unauthorization"), 404)
 
             const id = Number(c.req.param("id"));
+            if (!id) return c.json(ResFormmater.failed("Id tidak ditemukan atau tidak valid"));
             const record = await CommentModel.getById(id);
             if (!record) return c.json(ResFormmater.failed("Komentar tidak ditemukan", 404), 404);
 
@@ -59,7 +60,7 @@ export class CommentsController {
             const postId = Number(c.req.param("id"));
             if (!postId) return c.json(ResFormmater.failed("Komentar tidak ditemukan"), 404)
             const response = await CommentModel.getByPost(postId)
-            return c.json(ResFormmater.success(response, "Berhasil mendapatkan komentar", 200), 200)
+            return c.json(ResFormmater.success(response, "Berhasil mendapatkan komentar berdasarkan postingan", 200), 200)
         } catch (err) {
             return c.json(ResFormmater.failed("Server Error" + err, 500), 500);
         }
@@ -69,7 +70,7 @@ export class CommentsController {
         try {
             const response = await CommentModel.getAll()
             if (!response) return c.json(ResFormmater.failed("Komentar tidak ditemukan"), 404)
-            return c.json(ResFormmater.success(response, "Get all comments successfully"), 200);
+            return c.json(ResFormmater.success(response, "Berhasil mendapatka semua data komentar"), 200);
         } catch (err) {
             return c.json(ResFormmater.failed("Server Error" + err, 500), 500);
         }
@@ -78,7 +79,7 @@ export class CommentsController {
     static async getById(c: Context) {
         try {
             const id = Number(c.req.param("id"));
-            if (!id) return c.json(ResFormmater.failed("Komentar tidak ditemukan"), 404)
+            if (!id) return c.json(ResFormmater.failed("Id tidak ditemukan atau tidak valid"));
             const response = await CommentModel.getById(id)
             return c.json(ResFormmater.success(response, "Berhasil mendapatkan komentar", 200), 200)
         } catch (err) {
@@ -89,11 +90,12 @@ export class CommentsController {
     static async delete(c: Context) {
         try {
             const id = Number(c.req.param("id"));
+            if (!id) return c.json(ResFormmater.failed("Id tidak ditemukan atau tidak valid"));
             const user = c.get("user") as UserPayloadData;
-            if (!user) return c.json(ResFormmater.failed("Unuthorization", 403), 403)
+            if (!user) return c.json(ResFormmater.failed("Unauthorization", 403), 403)
             const response = await CommentModel.delete(id, user.userId, user.isAdmin);
-            if (!response) return c.json(ResFormmater.failed("Unuthorization", 403), 403)
-            return c.json(ResFormmater.success(response, "Berhasil menghapus postingan", 200), 200);
+            if (!response) return c.json(ResFormmater.failed("Unauthorization", 403), 403)
+            return c.json(ResFormmater.success(response, "Berhasil menghapus komentar", 200), 200);
         } catch (err) {
             return c.json(ResFormmater.failed("Server Error" + err, 500), 500);
         }

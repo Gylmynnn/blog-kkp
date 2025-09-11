@@ -14,7 +14,7 @@ export class AuthController {
             const { username, email, password } = await c.req.json<RegisterRequest>();
             if (!username || !email || !password) return c.json(ResFormmater.failed("Username, Email dan password wajib diisi", 400), 400);
 
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/ as RegExp;
             if (!emailRegex.test(email)) return c.json(ResFormmater.failed("Format email tidak valid", 400), 400);
 
             const existingUser = await UserModel.findByEmail(email);

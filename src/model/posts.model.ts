@@ -32,20 +32,8 @@ export class PostsModel {
             .from(posts)
             .leftJoin(users, eq(posts.authorId, users.id))
             .where(eq(posts.id, inserted.id));
-
         return post;
     }
-    // static async create({ title, content, authorId, image, imageId }: CreatePostsRequest) {
-    //     const result = await db.insert(posts).values({
-    //         title,
-    //         content,
-    //         image,
-    //         imageId,
-    //         authorId,
-    //     }).returning();
-    //     return result[0];
-    // }
-
     static async update({ id, title, authorId, content, image, imageId, }: UpdatePostsRequest) {
         const result = await db.update(posts).set({
             title,
@@ -100,32 +88,6 @@ export class PostsModel {
             .where(eq(posts.id, id));
         return result[0] || null;
     }
-
-
-    // static async getByAuthorId(id: number) {
-    //     return await db
-    //         .select(
-    //             {
-    //                 id: posts.id,
-    //                 title: posts.title,
-    //                 content: posts.content,
-    //                 image: posts.image,
-    //                 created_at: posts.createdAt,
-    //                 author: {
-    //                     id: users.id,
-    //                     username: users.username,
-    //                     email: users.email,
-    //                     avatar: users.avatar
-    //                 },
-    //             }
-    //         )
-    //         .from(posts)
-    //         .innerJoin(users, eq(posts.authorId, users.id))
-    //         .where(eq(posts.authorId, id))
-    //         .orderBy(desc(posts.createdAt));
-    // }
-
-
     static async getByAuthorId(authorId: number) {
         return await db
             .select({

@@ -31,7 +31,7 @@ export class PostsController {
             };
             const response = await PostsModel.create(data)
             return c.json(
-                ResFormmater.success(response, "Create posts successfully", 201),
+                ResFormmater.success(response, "Berhasil membuat postingan", 201),
                 201
             );
         } catch (err) {
@@ -42,15 +42,15 @@ export class PostsController {
     static async update(c: Context) {
         try {
             const userAuth = c.get("user") as UserPayloadData
-            if (!userAuth) return c.json(ResFormmater.failed("Unuthorization"), 404)
+            if (!userAuth) return c.json(ResFormmater.failed("Unauthorized"), 404)
             const id = Number(c.req.param("id"));
+            if (!id) return c.json(ResFormmater.failed("Id tidak ditemukan atau tidak valid"));
             const record = await PostsModel.getById(id);
             if (!record) return c.json(ResFormmater.failed("Postingan tidak ditemukan", 404), 404);
             const formData = await c.req.formData();
             const title = formData.get("title") as string;
             const content = formData.get("content") as string;
             const image = formData.get("image") as File;
-
             if (!title && !image && !content) return c.json(ResFormmater.failed("Harus update setidaknya 1 data"), 400);
             let imageUrl: UploadResponse | undefined;
             if (image) {
@@ -58,7 +58,6 @@ export class PostsController {
                 const imageBuffer = Buffer.from(await image.arrayBuffer());
                 imageUrl = await AssetActions.UploadPosts(imageBuffer);
             }
-
             const data: UpdatePostsRequest = {
                 id,
                 title: title || record.title,
@@ -67,7 +66,6 @@ export class PostsController {
                 authorId: userAuth.userId,
                 content: content || record.content,
             }
-
             const response = await PostsModel.update(data);
             if (!response) return c.json(ResFormmater.success([], "Postingan tidak ditemukan", 200), 200);
             return c.json(ResFormmater.success(response, "Berhasil mengupdate postingan", 200), 200);
@@ -78,7 +76,7 @@ export class PostsController {
     static async getAll(c: Context) {
         try {
             const response = await PostsModel.getAll()
-            return c.json(ResFormmater.success(response, "Get all posts successfully"), 200);
+            return c.json(ResFormmater.success(response, "Berhasil medapatkan semua data postingan"), 200);
         } catch (err) {
             return c.json(ResFormmater.failed("Server Error" + err, 500), 500);
         }
@@ -90,13 +88,10 @@ export class PostsController {
             const userAuth = c.get("user") as UserPayloadData | undefined;
             if (!userAuth) return c.json(ResFormmater.failed("Unauthorized", 401), 401);
             const authorId = Number(userAuth.userId);
-            if (isNaN(authorId)) return c.json(ResFormmater.failed("Invalid user id", 400), 400);
+            if (isNaN(authorId)) return c.json(ResFormmater.failed("Author id tidak valid", 400), 400);
             const response = await PostsModel.getByAuthorId(authorId);
-            if (!response || response.length === 0) return c.json(ResFormmater.success([], "Posts not found", 200), 200);
-            return c.json(
-                ResFormmater.success(response, "Get posts by author id successfully"),
-                200
-            );
+            if (!response || response.length === 0) return c.json(ResFormmater.success([], "Postingan tidak ditemukan", 200), 200);
+            return c.json(ResFormmater.success(response, "Berhasil medapatkan postingan berdasarkan author id"), 200);
         } catch (err: any) {
             return c.json(ResFormmater.failed(err.message || "Server Error", 500), 500);
         }
@@ -106,10 +101,11 @@ export class PostsController {
     static async getById(c: Context) {
         try {
             const id = Number(c.req.param("id"));
+            if (!id) return c.json(ResFormmater.failed("Id tidak ditemukan atau tidak valid"));
             const response = await PostsModel.getById(id);
-            if (!response) return c.json(ResFormmater.failed("Posts not found", 404), 404);
-            return c.json(ResFormmater.success(response, "Get posts by id successfully"), 200);
-        } catch (err) {
+            if (!response) return c.json(ResFormmater.failed("Postingan tidak ditemukan", 404), 404);
+            return c.json(ResFormmater.success(response, "Berhasil mendapatkan postingan berdasarkan id"), 200);
+        } catch (err : any) {
             return c.json(ResFormmater.failed("Server Error" + err, 500), 500);
         }
     }
@@ -117,8 +113,9 @@ export class PostsController {
     static async delete(c: Context) {
         try {
             const user = c.get("user") as UserPayloadData;
-            if (!user) return c.json(ResFormmater.failed("Unuthorization", 403), 403)
+            if (!user) return c.json(ResFormmater.failed("Unauthorized", 403), 403)
             const id = Number(c.req.param("id"))
+            if (!id) return c.json(ResFormmater.failed("Id tidak ditemukan atau tidak valid"));
             const record = await PostsModel.getById(id);
             if (!record) return c.json(ResFormmater.failed("Posts tidak ditemukan", 404), 404)
             const imageId = record.imageId

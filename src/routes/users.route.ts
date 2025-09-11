@@ -6,6 +6,6 @@ const users = new Hono().basePath("/v1")
     .get("/users", UserController.getAll)
     .get("/users/:id", UserController.getById)
     .put("/users/:id", AuthMiddleware, UserController.update)
-    // .delete("/users/:id", AuthMiddleware, UserController.delete)
+    .delete("/users/:id", AuthMiddleware, UserController.delete)
 
 export default users

@@ -6,12 +6,29 @@ import { CreateCommentsRequest, UpdateCommentsRequest } from "../lib/dto/comment
 
 export class CommentModel {
     static async create({ content, postId, authorId }: CreateCommentsRequest) {
-        const result = await db.insert(comments).values({
+        const [inserted] = await db.insert(comments).values({
             content,
             postId,
             authorId,
-        }).returning();
-        return result[0];
+        }).returning({ id: comments.id });
+        const [result] = await db
+            .select({
+                id: comments.id,
+                content: comments.content,
+                createdAt: comments.createdAt,
+                postId: comments.postId,
+                author: {
+                    id: users.id,
+                    username: users.username,
+                    avatar: users.avatar,
+                    email: users.email,
+                    createdAt: users.createdAt
+                },
+            })
+            .from(comments)
+            .leftJoin(users, eq(comments.authorId, users.id))
+            .where(eq(comments.id, inserted.id));
+        return result;
     }
 
     static async update({ id, authorId, content }: UpdateCommentsRequest) {
@@ -23,18 +40,19 @@ export class CommentModel {
         return result[0] || null;
     }
 
-
     static async getByPost(postId: number) {
         return await db
             .select({
                 id: comments.id,
                 content: comments.content,
-                created_at: comments.createdAt,
+                createdAt: comments.createdAt,
+                postId: comments.postId,
                 author: {
                     id: users.id,
                     username: users.username,
                     avatar: users.avatar,
-                    email: users.email
+                    email: users.email,
+                    createdAt: users.createdAt
                 },
             })
             .from(comments)
@@ -48,12 +66,14 @@ export class CommentModel {
             .select({
                 id: comments.id,
                 content: comments.content,
-                created_at: comments.createdAt,
+                createdAt: comments.createdAt,
+                postId: comments.postId,
                 author: {
                     id: users.id,
                     username: users.username,
                     avatar: users.avatar,
-                    email: users.email
+                    email: users.email,
+                    createdAt: users.createdAt
                 },
             })
             .from(comments)
@@ -67,12 +87,14 @@ export class CommentModel {
             .select({
                 id: comments.id,
                 content: comments.content,
-                created_at: comments.createdAt,
+                createdAt: comments.createdAt,
+                postId: comments.postId,
                 author: {
                     id: users.id,
                     username: users.username,
                     email: users.email,
                     avatar: users.avatar,
+                    createdAt: users.createdAt
                 },
             })
             .from(comments)
