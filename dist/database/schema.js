@@ -9,6 +9,11 @@ const users = pgTable("users", {
     email: varchar("email", { length: 100 }).notNull().unique(),
     password: varchar("password", { length: 255 }).notNull(),
     isAdmin: boolean().default(false),
+    internshipStartDate: varchar("internship_start_date", { length: 100 }),
+    internshipEndDate: varchar("internship_end_date", { length: 100 }),
+    internshipPosition: varchar("internship_position", { length: 100 }),
+    internshipDivision: varchar("internship_division", { length: 100 }),
+    school: varchar("school", { length: 200 }),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").defaultNow(),
 });

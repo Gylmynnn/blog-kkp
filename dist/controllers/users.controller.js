@@ -9,6 +9,11 @@ export class UserController {
             const formData = await c.req.formData();
             const username = formData.get("username");
             const avatar = formData.get("avatar");
+            const school = formData.get("school");
+            const internshipStartDate = formData.get("internshipStartDate");
+            const internshipEndDate = formData.get("internshipEndDate");
+            const internshipPosition = formData.get("internshipPosition");
+            const internshipDivision = formData.get("internshipDivision");
             if (!id)
                 return c.json(ResFormmater.failed("User id harus ada", 400), 400);
             if (!username && !avatar)
@@ -27,6 +32,11 @@ export class UserController {
                 username: username || record.username,
                 avatar: imageUrl?.url || record.avatar,
                 avatarId: imageUrl?.assetId || record.avatarId,
+                school: school || record.school,
+                internshipStartDate: internshipStartDate || record.internshipStartDate,
+                internshipEndDate: internshipEndDate || record.internshipEndDate,
+                internshipPosition: internshipPosition || record.internshipPosition,
+                internshipDivision: internshipDivision || record.internshipDivision,
             };
             const user = await UserModel.update(data);
             if (!user)

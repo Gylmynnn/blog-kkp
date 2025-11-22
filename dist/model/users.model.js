@@ -11,11 +11,16 @@ export class UserModel {
         }).returning();
         return result[0];
     }
-    static async update({ id, username, avatar, avatarId }) {
+    static async update({ id, username, avatar, avatarId, internshipStartDate, internshipEndDate, internshipPosition, internshipDivision, school }) {
         const result = await db.update(users).set({
             username,
             avatar,
             avatarId,
+            internshipStartDate,
+            internshipEndDate,
+            internshipPosition,
+            internshipDivision,
+            school,
             updatedAt: new Date(),
         }).where(eq(users.id, id)).returning();
         return result[0] || null;

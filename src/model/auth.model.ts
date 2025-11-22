@@ -3,8 +3,8 @@ import { db } from "../database/index.js";
 import { users } from "../database/schema.js";
 
 export class AuthModel {
-    static async register(username: string, email: string, password: string, avatar: string) {
-        const result = await db.insert(users).values({ username, email, password, avatar }).returning()
+    static async register(username: string, email: string, password: string, avatar: string, school?: string) {
+        const result = await db.insert(users).values({ username, email, password, avatar, school }).returning()
         return result[0];
     }
 

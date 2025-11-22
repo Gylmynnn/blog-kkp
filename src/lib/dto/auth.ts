@@ -32,6 +32,7 @@ interface RegisterRequest {
     username: string;
     email: string;
     password: string;
+    school?: string;
 }
 
 

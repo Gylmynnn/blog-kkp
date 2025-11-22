@@ -36,6 +36,20 @@
       "when": 1756789949363,
       "tag": "0004_omniscient_midnight",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1763734315461,
+      "tag": "0005_glamorous_nico_minoru",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1763789339796,
+      "tag": "0006_ancient_princess_powerful",
+      "breakpoints": true
     }
   ]
 }

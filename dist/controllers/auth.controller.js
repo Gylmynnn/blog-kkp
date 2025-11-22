@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 export class AuthController {
     static async register(c) {
         try {
-            const { username, email, password } = await c.req.json();
+            const { username, email, password, school } = await c.req.json();
             if (!username || !email || !password)
                 return c.json(ResFormmater.failed("Username, Email dan password wajib diisi", 400), 400);
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -20,7 +20,7 @@ export class AuthController {
                 return c.json(ResFormmater.failed("Password minimal 6 karakter"), 400);
             const hashPw = await bcrypt.hash(password, 10);
             const defaultAvatar = "https://avatar.iran.liara.run/public";
-            const user = await AuthModel.register(username, email, hashPw, defaultAvatar);
+            const user = await AuthModel.register(username, email, hashPw, defaultAvatar, school);
             const response = {
                 id: user.id,
                 username: user.username,
