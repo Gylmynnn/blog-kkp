@@ -13,6 +13,11 @@ interface LoginResponse {
     avatar: string;
     isAdmin: boolean;
     createdAt: Date;
+    internshipStartDate?: string | null;
+    internshipEndDate?: string | null;
+    internshipPosition?: string | null;
+    internshipDivision?: string | null;
+    school?: string | null;
 }
 
 interface LoginRequest {

@@ -64,6 +64,11 @@ export class AuthController {
             token: token,
             isAdmin: user.isAdmin!,
             createdAt: user.createdAt!,
+            internshipStartDate: user.internshipStartDate ?? null,
+            internshipEndDate: user.internshipEndDate ?? null,
+            internshipPosition: user.internshipPosition ?? null,
+            internshipDivision: user.internshipDivision ?? null,
+            school: user.school ?? null,
          }
          return c.json(ResFormmater.success(response, "Login berhasil"), 200);
       } catch (err) {
