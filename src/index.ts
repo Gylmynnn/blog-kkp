@@ -5,6 +5,10 @@ import posts from './routes/posts.route.js';
 import comments from './routes/comments.route.js';
 import users from './routes/users.route.js';
 import swagger from './routes/swagger.route.js';
+import { runAutoMigration } from './database/auto-migrate.js';
+
+// Run auto-migration on startup (only in production)
+runAutoMigration().catch(console.error);
 
 const app = new Hono()
 app.use(
